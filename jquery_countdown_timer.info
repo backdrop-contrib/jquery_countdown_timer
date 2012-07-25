@@ -1,0 +1,4 @@
+name = jQuery Countdown Timer
+description = This module provides a block with a jQuery countdown timer 
+core = 7.x
+dependencies[] = date_api
