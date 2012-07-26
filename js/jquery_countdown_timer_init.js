@@ -1,4 +1,6 @@
-$(function(){
+(function($){
+    Drupal.behaviors.eu_cookie_compliance_popup = {
+      attach: function(context, settings) {
 	
 	var note = $('#note'),
 		ts = new Date(Drupal.settings.jquery_countdown_timer.jquery_countdown_timer_date),
@@ -33,4 +35,6 @@ $(function(){
 		}
 	});
 	
-});
+      }
+    }
+  })(jQuery);
