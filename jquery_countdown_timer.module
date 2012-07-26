@@ -82,15 +82,15 @@ function jquery_countdown_timer_get_content() {
     'jquery_countdown_timer_date' => strtotime(variable_get('jquery_countdown_timer_date', date('Y-m-d G:i:s'))),
   );
   drupal_add_js(array('jquery_countdown_timer' => $settings), array('type' => 'setting', 'scope' => 'footer'));
-  return '<div id="jquery-countdown-timer"></div>';
+  return '<div id="jquery-countdown-timer"></div><div id="jquery-countdown-timer-note"></div>';
 }
 
 /**
  * Implements hook_init().
  */
 function jquery_countdown_timer_init() {
-  $path = drupal_get_path('module', 'eu_cookie_compliance');
-  drupal_add_css($path . '/css/jquery_countdown_timer');         
+  $path = drupal_get_path('module', 'jquery_countdown_timer');  
+  drupal_add_css($path . '/css/jquery_countdown_timer.css');         
 }
 
   
