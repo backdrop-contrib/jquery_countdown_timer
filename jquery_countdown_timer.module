@@ -6,6 +6,16 @@
  * Author: Marcin Pajdzik
  */
 
+/**
+ * Implements hook_theme().
+ */
+function jquery_countdown_timer_theme() {
+  return array(
+    'jquery_countdown_timer_container' => array(
+      'variables' => array(),
+    )
+  ); 
+}
 
 /**
  * Implements hook_block_info().
@@ -83,8 +93,21 @@ function jquery_countdown_timer_get_content() {
     'jquery_countdown_timer_date' => strtotime(variable_get('jquery_countdown_timer_date', date('Y-m-d G:i:s'))),
   );
   drupal_add_js(array('jquery_countdown_timer' => $settings), array('type' => 'setting', 'scope' => 'footer'));
-  return '<div id="jquery-countdown-timer"></div><div id="jquery-countdown-timer-note"></div>';
+  $content = theme('jquery_countdown_timer_container', array());
+
+  return $content;
 }
 
+/**
+ * Returns HTML for the timer container.
+ * 
+ * @param type $variables
+ * @return string 
+ */
 
-  
+function theme_jquery_countdown_timer_container($variables) {
+  $output = '';
+  $output .= "<div id='jquery-countdown-timer'></div>";
+  $output .= "<div id='jquery-countdown-timer-note'></div>";
+  return $output;
+}
