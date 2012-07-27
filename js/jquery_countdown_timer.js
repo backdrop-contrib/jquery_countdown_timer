@@ -78,14 +78,14 @@
 
 		// Creating the markup inside the container
 		$.each(['Days','Hours','Minutes','Seconds'],function(i){
-			$('<span class="count'+this+'">').html(
-				'<span class="position">\
-					<span class="digit static">0</span>\
-				</span>\
-				<span class="position">\
-					<span class="digit static">0</span>\
-				</span>'
-			).appendTo(elem);
+                        $('<span class="count'+this+'">'+
+                                '<span class="position">'+
+                                        '<span class="digit static">0</span>'+
+                                '</span>'+
+                                '<span class="position">'+
+                                        '<span class="digit static">0</span>'+
+                                '</span>'+
+                        '</span>').appendTo(elem);
 			
 			if(this!="Seconds"){
 				elem.append('<span class="countDiv countDiv'+i+'"></span>');
