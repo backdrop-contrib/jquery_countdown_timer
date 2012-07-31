@@ -3,7 +3,7 @@
     attach: function(context, settings) {
       var note = $('#jquery-countdown-timer-note'),
       ts = new Date(Drupal.settings.jquery_countdown_timer.jquery_countdown_timer_date * 1000);
-      $('#jquery-countdown-timer').countdown({
+      $('#jquery-countdown-timer').not('.jquery-countdown-timer-processed').addClass('jquery-countdown-timer-processed').countdown({
 	timestamp : ts,
 	callback : function(days, hours, minutes, seconds){
           var message = "";
