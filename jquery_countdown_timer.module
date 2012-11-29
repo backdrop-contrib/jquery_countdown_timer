@@ -48,6 +48,7 @@ function jquery_countdown_timer_block_configure($delta) {
         '#type' => 'date_select',
         '#title' => t('Timer date'),
         '#default_value' => variable_get('jquery_countdown_timer_date', date('Y-m-d G:i:s')),
+	'#date_format' => 'Y-m-d H:i',
       );
       break;
   }
