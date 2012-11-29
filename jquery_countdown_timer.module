@@ -14,7 +14,7 @@ function jquery_countdown_timer_theme() {
     'jquery_countdown_timer_container' => array(
       'variables' => array(),
     )
-  ); 
+  );
 }
 
 /**
@@ -24,7 +24,7 @@ function jquery_countdown_timer_block_info() {
   $blocks = array();
   $blocks['jquery_countdown_timer'] = array(
     'info'  => t('jQuery Countdown Timer'),
-    'cache' => DRUPAL_CACHE_GLOBAL     
+    'cache' => DRUPAL_CACHE_GLOBAL
   );
   return $blocks;
 }
@@ -76,37 +76,58 @@ function jquery_countdown_timer_block_view($delta = '', $edit = array()) {
   switch ($delta) {
     case 'jquery_countdown_timer':
       $block['subject'] = 'Countdown';
-      $block['content'] = jquery_countdown_timer_get_content();
+      $block['content'] = array(
+        '#markup' => theme('jquery_countdown_timer_container', array()),
+        '#attached' => jquery_countdown_timer_attach(),
+      );
       break;
   }
   return $block;
 }
 
 /**
- * Builds the countdown timer.
+ * Adds javascript to the block.
  */
-function jquery_countdown_timer_get_content() {
+function jquery_countdown_timer_attach() {
+  $attach = array();
   $path = drupal_get_path('module', 'jquery_countdown_timer');
-  drupal_add_js($path . '/js/jquery_countdown_timer.js', array('type' => 'file', 'scope' => 'footer'));
-  drupal_add_js($path . '/js/jquery_countdown_timer_init.js', array('type' => 'file', 'scope' => 'footer'));
-  drupal_add_css($path . '/css/jquery_countdown_timer.css'); 
-  $font_size = variable_get('jquery_countdown_timer_font_size', 28);
-  drupal_add_css('.countdownHolder {font-size: ' . $font_size . 'px}', 'inline');
+  // add external js files
+  $attach['js'] = array(
+    $path . '/js/jquery_countdown_timer.js' => array (
+      'type' => 'file',
+      'scope' => 'footer',
+    ),
+    $path . '/js/jquery_countdown_timer_init.js'=> array (
+      'type' => 'file',
+      'scope' => 'footer',
+    ),
+  );
+  // add js settings
   $settings = array(
     'jquery_countdown_timer_date' => strtotime(variable_get('jquery_countdown_timer_date', date('Y-m-d G:i:s'))),
   );
-
-  drupal_add_js(array('jquery_countdown_timer' => $settings), array('type' => 'setting', 'scope' => 'footer'));
-  $content = theme('jquery_countdown_timer_container', array());
-
-  return $content;
+   $attach['js'][] = array(
+     'data' =>  array('jquery_countdown_timer' => $settings),
+     'type' => 'setting',
+   );
+   //add css
+   $attach['css'] = array(
+     $path . '/css/jquery_countdown_timer.css',
+   );
+   //add inline css
+   $font_size = variable_get('jquery_countdown_timer_font_size', 28);
+   $attach['css'][] = array(
+     'data' => '.countdownHolder {font-size: ' . $font_size . 'px}',
+     'type' => 'inline',
+   );
+  return $attach;
 }
 
 /**
  * Returns HTML for the timer container.
- * 
+ *
  * @param type $variables
- * @return string 
+ * @return string
  */
 
 function theme_jquery_countdown_timer_container($variables) {
