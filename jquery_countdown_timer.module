@@ -72,7 +72,7 @@ function jquery_countdown_timer_block_save($delta = '', $edit = array()) {
  * Implements hook_block_view().
  */
 function jquery_countdown_timer_block_view($delta = '', $edit = array()) {
-  $block = '';
+  $block = array();
   switch ($delta) {
     case 'jquery_countdown_timer':
       $block['subject'] = 'Countdown';
