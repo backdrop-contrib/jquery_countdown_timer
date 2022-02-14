@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * This module provides block with a simple jQuery coundown
@@ -13,7 +14,7 @@ function jquery_countdown_timer_theme() {
   return array(
     'jquery_countdown_timer_container' => array(
       'variables' => array(),
-    )
+    ),
   );
 }
 
@@ -23,16 +24,28 @@ function jquery_countdown_timer_theme() {
 function jquery_countdown_timer_block_info() {
   $blocks = array();
   $blocks['jquery_countdown_timer'] = array(
-    'info'  => t('jQuery Countdown Timer'),
-    'cache' => DRUPAL_CACHE_GLOBAL
+    'info' => t('jQuery Countdown Timer'),
+    'cache' => BACKDROP_CACHE_GLOBAL,
   );
   return $blocks;
+}
+
+/**
+ * Implements hook_config_info().
+ */
+function jquery_countdown_timer_config_info() {
+  $prefixes['jquery_countdown_timer.settings'] = array(
+    'label' => t('jQuery Countdown Timer settings'),
+    'group' => t('Configuration'),
+  );
+  return $prefixes;
 }
 
 /**
  * Implements hook_block_configure().
  */
 function jquery_countdown_timer_block_configure($delta) {
+  $config = config('jquery_countdown_timer.settings');
   $form = array();
   switch ($delta) {
     case 'jquery_countdown_timer':
@@ -40,15 +53,15 @@ function jquery_countdown_timer_block_configure($delta) {
       $form['jquery_countdown_timer_font_size'] = array(
         '#type' => 'textfield',
         '#title' => t('Timer font size'),
-        '#default_value' => variable_get('jquery_countdown_timer_font_size', 28),
+        '#default_value' => $config->get('jquery_countdown_timer_font_size'),
         '#size' => 3,
         '#maxlength' => 2,
       );
       $form['jquery_countdown_timer_date'] = array(
         '#type' => 'date_select',
         '#title' => t('Timer date'),
-        '#default_value' => variable_get('jquery_countdown_timer_date', date('Y-m-d G:i:s')),
-	'#date_format' => 'Y-m-d H:i',
+        '#default_value' => $config->get('jquery_countdown_timer_date'),
+        '#date_format' => 'Y-m-d H:i',
       );
       break;
   }
@@ -62,8 +75,8 @@ function jquery_countdown_timer_block_configure($delta) {
 function jquery_countdown_timer_block_save($delta = '', $edit = array()) {
   switch ($delta) {
     case 'jquery_countdown_timer':
-      variable_set('jquery_countdown_timer_date', $edit['jquery_countdown_timer_date']);
-      variable_set('jquery_countdown_timer_font_size', (int)$edit['jquery_countdown_timer_font_size']);
+      config_set('jquery_countdown_timer.settings', 'jquery_countdown_timer_date', $edit['jquery_countdown_timer_date']);
+      config_set('jquery_countdown_timer.settings', 'jquery_countdown_timer_font_size', (int) $edit['jquery_countdown_timer_font_size']);
       break;
   }
 }
@@ -91,28 +104,29 @@ function jquery_countdown_timer_block_view($delta = '', $edit = array()) {
  * @return array  an array of items to attach to the current request
  */
 function jquery_countdown_timer_attach($context = NULL) {
+  $config = config('jquery_countdown_timer.settings');
   $attach = array();
-  $path = drupal_get_path('module', 'jquery_countdown_timer');
+  $path = backdrop_get_path('module', 'jquery_countdown_timer');
   // add external js files
   $attach['js'] = array(
-    $path . '/js/jquery_countdown_timer.js' => array (
+    $path . '/js/jquery_countdown_timer.js' => array(
       'type' => 'file',
       'scope' => 'footer',
     ),
-    $path . '/js/jquery_countdown_timer_init.js'=> array (
+    $path . '/js/jquery_countdown_timer_init.js' => array(
       'type' => 'file',
       'scope' => 'footer',
     ),
   );
   // set the default date and allow other projects to modify contextually
-  $date = variable_get('jquery_countdown_timer_date', date('Y-m-d G:i:s'));
-  drupal_alter('jquery_countdown_timer_date', $date, $context);
+  $date = $config->get('jquery_countdown_timer_date');
+  backdrop_alter('jquery_countdown_timer_date', $date, $context);
   // add js settings
   $settings = array(
     'jquery_countdown_timer_date' => strtotime($date),
   );
   $attach['js'][] = array(
-    'data' =>  array('jquery_countdown_timer' => $settings),
+    'data' => array('jquery_countdown_timer' => $settings),
     'type' => 'setting',
   );
   //add css
@@ -120,7 +134,7 @@ function jquery_countdown_timer_attach($context = NULL) {
     $path . '/css/jquery_countdown_timer.css',
   );
   //add inline css
-  $font_size = variable_get('jquery_countdown_timer_font_size', 28);
+  $font_size = $config->get('jquery_countdown_timer_font_size');
   $attach['css'][] = array(
     'data' => '.countdownHolder {font-size: ' . $font_size . 'px}',
     'type' => 'inline',
@@ -135,6 +149,10 @@ function jquery_countdown_timer_attach($context = NULL) {
  * @return string
  */
 
+/**
+ * @todo Please document this function.
+ * @see http://drupal.org/node/1354
+ */
 function theme_jquery_countdown_timer_container($variables) {
   $output = '';
   $output .= "<div id='jquery-countdown-timer'></div>";
