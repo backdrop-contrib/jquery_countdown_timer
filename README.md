@@ -22,3 +22,7 @@ Bugs and feature requests should be reported in the [Issue Queue](https://github
 
 The module utilizes the jQuery Countdown Timer script written by Martin Angelov:
 http://tutorialzine.com/2011/12/countdown-jquery/
+
+## License
+
+This project is GPL v2 software. See the LICENSE.txt file in this directory for complete text.
