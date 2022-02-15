@@ -9,7 +9,8 @@ This module provides a block with a jQuery countdown timer.
 
 ## Issues
 
-Bugs and feature requests should be reported in the [Issue Queue](https://github.com/backdrop-contrib/jquery_countdown_timer/issues).
+Bugs and feature requests should be reported in the 
+[Issue Queue](https://github.com/backdrop-contrib/jquery_countdown_timer/issues).
 
 ## Current Maintainer
 
